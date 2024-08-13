@@ -17,6 +17,7 @@ class Statement < ApplicationRecord
     RATING_B = 'B'
     RATING_C = 'C'
     RATING_D = 'D'
+    RATING_NA = 'N/A'
   end
 
   belongs_to :user
@@ -30,14 +31,18 @@ class Statement < ApplicationRecord
   validate :overlapping_intervals
 
   def income_and_expediture_rating
-    RatingGrades.all[RatingIntervals.all.find { |_key, value| value.cover?(ratio) }.first]
+    return RatingGrades::RATING_NA if total_income.zero?
+
+    RatingGrades.all[RatingIntervals.all.find { |_key, value| value.cover?(ratio) }&.first]
+  end
+
+  def disposable_income
+    total_income - total_expediture
   end
 
   private
 
   def ratio
-    return RatingGrades::RATING_D if total_income.zero?
-
     ((total_expediture / total_income) * 100).round(2)
   end
 

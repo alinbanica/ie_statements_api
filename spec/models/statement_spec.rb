@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-RSpec.shared_examples 'calculating the correct rating' do
+
+RSpec.shared_examples 'calculating the correct rating per ratio' do
   it 'expects rating to be calculated correct' do
     allow(statement).to receive(:ratio).and_return(ratio)
     expect(statement.income_and_expediture_rating).to eq(expected_rating)
@@ -65,45 +66,92 @@ RSpec.describe Statement, type: :model do
   end
 
   describe '#income_and_expediture_rating' do
-    let(:statement) do
-      create(:statement, user:,
-                         statement_items: [
-                           build(:statement_item, :income, description: 'Salary', amount: 2800),
-                           build(:statement_item, :expediture, description: 'Mortgage', amount: 500),
-                           build(:statement_item, :expediture, description: 'Travel', amount: 150)
-                         ])
+    let(:statement_items) do
+      [
+        build(:statement_item, :income, description: 'Salary', amount: 2800),
+        build(:statement_item, :expediture, description: 'Mortgage', amount: 500),
+        build(:statement_item, :expediture, description: 'Travel', amount: 150)
+      ]
     end
+
+    let(:statement) { create(:statement, user:, statement_items:) }
 
     it 'calculates the income and expediture rating correctly' do
       expect(statement.income_and_expediture_rating).to eq(Statement::RatingGrades::RATING_B)
+    end
+
+    context 'when there are no statement items associated to the statement' do
+      let(:statement_items) { [] }
+
+      it 'calculates the income and expediture rating correctly' do
+        expect(statement.income_and_expediture_rating).to eq(Statement::RatingGrades::RATING_NA)
+      end
+    end
+
+    context 'when we have only expediture statement items associated to the statement' do
+      let(:statement_items) do
+        [
+          build(:statement_item, :expediture, description: 'Mortgage', amount: 500)
+        ]
+      end
+
+      it 'calculates the income and expediture rating correctly' do
+        expect(statement.income_and_expediture_rating).to eq(Statement::RatingGrades::RATING_NA)
+      end
+    end
+
+    context 'when we have only income statement items associated to the statement' do
+      let(:statement_items) do
+        [
+          build(:statement_item, :income, description: 'Salary', amount: 1500)
+        ]
+      end
+
+      it 'calculates the income and expediture rating correctly' do
+        expect(statement.income_and_expediture_rating).to eq(Statement::RatingGrades::RATING_A)
+      end
     end
 
     context 'when ratio is below 10%' do
       let(:ratio) { 8 }
       let(:expected_rating) { Statement::RatingGrades::RATING_A }
 
-      it_behaves_like 'calculating the correct rating'
+      it_behaves_like 'calculating the correct rating per ratio'
     end
 
     context 'when ratio is greater or equal with 10% and less then 30%' do
       let(:ratio) { 10 }
       let(:expected_rating) { Statement::RatingGrades::RATING_B }
 
-      it_behaves_like 'calculating the correct rating'
+      it_behaves_like 'calculating the correct rating per ratio'
     end
 
     context 'when ratio is greater or equal with 30% and less then 50%' do
       let(:ratio) { 49.99 }
       let(:expected_rating) { Statement::RatingGrades::RATING_C }
 
-      it_behaves_like 'calculating the correct rating'
+      it_behaves_like 'calculating the correct rating per ratio'
     end
 
     context 'when ratio is greater or equal with 50%' do
       let(:ratio) { 89.25 }
       let(:expected_rating) { Statement::RatingGrades::RATING_D }
 
-      it_behaves_like 'calculating the correct rating'
+      it_behaves_like 'calculating the correct rating per ratio'
+    end
+  end
+
+  describe '#disposable_income' do
+    it 'calculates the disposable income correctly' do
+      statement = create(:statement, user:,
+                                     statement_items: [
+                                       build(:statement_item, :income, description: 'Salary', amount: 2800),
+                                       build(:statement_item, :income, description: 'Rent', amount: 100),
+                                       build(:statement_item, :expediture, description: 'Mortgage', amount: 500),
+                                       build(:statement_item, :expediture, description: 'Travel', amount: 150)
+                                     ])
+
+      expect(statement.disposable_income).to eq(2250)
     end
   end
 end
