@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:user) { FactoryBot.build(:user) }
+
+  let(:user) { build(:user) }
 
   context 'Should validate' do
     it 'with name, email, and password' do
