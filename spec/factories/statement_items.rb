@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :statement_item do
-    statement
-    item_type { '' }
+    association :statement
     description { 'Other' }
     amount { '1000.00' }
 
@@ -13,5 +14,4 @@ FactoryBot.define do
       item_type { StatementItem::ItemTypes::EXPEDITURE }
     end
   end
-
 end

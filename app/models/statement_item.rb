@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StatementItem < ApplicationRecord
   module ItemTypes
     include EnumUtilities

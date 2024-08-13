@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EnumUtilities
   extend ActiveSupport::Concern
 
@@ -9,7 +11,7 @@ module EnumUtilities
           .freeze
       end
 
-      alias_method  :all, :to_hash
+      alias_method :all, :to_hash
     end
   end
 end

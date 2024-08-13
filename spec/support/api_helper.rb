@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiHelper
   def authenticated_header(request, user)
     headers = { 'Accept' => 'application/json', 'Content-Type' => 'application/json' }
