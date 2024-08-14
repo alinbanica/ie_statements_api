@@ -1,6 +1,6 @@
+# frozen_string_literal: true
 
 class GenerateErrorMessages
-
   def initialize(invalid_record)
     @invalid_record = invalid_record
   end
@@ -10,7 +10,7 @@ class GenerateErrorMessages
       humanized_attribute = error.attribute.to_s.humanize if error.attribute != :base
 
       {
-        message: "Oops! " + [humanized_attribute, error.message].compact.join(' '),
+        message: [humanized_attribute, error.message].compact.join(' '),
         field: error.attribute.to_s
       }
     end
