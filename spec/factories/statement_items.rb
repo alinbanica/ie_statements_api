@@ -10,8 +10,8 @@ FactoryBot.define do
       item_type { StatementItem::ItemTypes::INCOME }
     end
 
-    trait :expediture do
-      item_type { StatementItem::ItemTypes::EXPEDITURE }
+    trait :expenditure do
+      item_type { StatementItem::ItemTypes::EXPENDITURE }
     end
   end
 end

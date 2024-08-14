@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.shared_examples 'calculating the correct rating per ratio' do
   it 'expects rating to be calculated correct' do
     allow(statement).to receive(:ratio).and_return(ratio)
-    expect(statement.income_and_expediture_rating).to eq(expected_rating)
+    expect(statement.income_and_expenditure_rating).to eq(expected_rating)
   end
 end
 
@@ -65,38 +65,38 @@ RSpec.describe Statement, type: :model do
     end
   end
 
-  describe '#income_and_expediture_rating' do
+  describe '#income_and_expenditure_rating' do
     let(:statement_items) do
       [
         build(:statement_item, :income, description: 'Salary', amount: 2800),
-        build(:statement_item, :expediture, description: 'Mortgage', amount: 500),
-        build(:statement_item, :expediture, description: 'Travel', amount: 150)
+        build(:statement_item, :expenditure, description: 'Mortgage', amount: 500),
+        build(:statement_item, :expenditure, description: 'Travel', amount: 150)
       ]
     end
 
     let(:statement) { create(:statement, user:, statement_items:) }
 
-    it 'calculates the income and expediture rating correctly' do
-      expect(statement.income_and_expediture_rating).to eq(Statement::RatingGrades::RATING_B)
+    it 'calculates the income and expenditure rating correctly' do
+      expect(statement.income_and_expenditure_rating).to eq(Statement::RatingGrades::RATING_B)
     end
 
     context 'when there are no statement items associated to the statement' do
       let(:statement_items) { [] }
 
-      it 'calculates the income and expediture rating correctly' do
-        expect(statement.income_and_expediture_rating).to eq(Statement::RatingGrades::RATING_NA)
+      it 'calculates the income and expenditure rating correctly' do
+        expect(statement.income_and_expenditure_rating).to eq(Statement::RatingGrades::RATING_NA)
       end
     end
 
-    context 'when we have only expediture statement items associated to the statement' do
+    context 'when we have only expenditure statement items associated to the statement' do
       let(:statement_items) do
         [
-          build(:statement_item, :expediture, description: 'Mortgage', amount: 500)
+          build(:statement_item, :expenditure, description: 'Mortgage', amount: 500)
         ]
       end
 
-      it 'calculates the income and expediture rating correctly' do
-        expect(statement.income_and_expediture_rating).to eq(Statement::RatingGrades::RATING_NA)
+      it 'calculates the income and expenditure rating correctly' do
+        expect(statement.income_and_expenditure_rating).to eq(Statement::RatingGrades::RATING_NA)
       end
     end
 
@@ -107,8 +107,8 @@ RSpec.describe Statement, type: :model do
         ]
       end
 
-      it 'calculates the income and expediture rating correctly' do
-        expect(statement.income_and_expediture_rating).to eq(Statement::RatingGrades::RATING_A)
+      it 'calculates the income and expenditure rating correctly' do
+        expect(statement.income_and_expenditure_rating).to eq(Statement::RatingGrades::RATING_A)
       end
     end
 
@@ -147,8 +147,8 @@ RSpec.describe Statement, type: :model do
                                      statement_items: [
                                        build(:statement_item, :income, description: 'Salary', amount: 2800),
                                        build(:statement_item, :income, description: 'Rent', amount: 100),
-                                       build(:statement_item, :expediture, description: 'Mortgage', amount: 500),
-                                       build(:statement_item, :expediture, description: 'Travel', amount: 150)
+                                       build(:statement_item, :expenditure, description: 'Mortgage', amount: 500),
+                                       build(:statement_item, :expenditure, description: 'Travel', amount: 150)
                                      ])
 
       expect(statement.disposable_income).to eq(2250)

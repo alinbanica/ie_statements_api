@@ -30,28 +30,28 @@ class Statement < ApplicationRecord
   validate :ends_on_after_starts_on
   validate :overlapping_intervals
 
-  def income_and_expediture_rating
+  def income_and_expenditure_rating
     return RatingGrades::RATING_NA if total_income.zero?
 
     RatingGrades.all[RatingIntervals.all.find { |_key, value| value.cover?(ratio) }&.first]
   end
 
   def disposable_income
-    total_income - total_expediture
+    total_income - total_expenditure
   end
 
   private
 
   def ratio
-    ((total_expediture / total_income) * 100).round(2)
+    ((total_expenditure / total_income) * 100).round(2)
   end
 
   def total_income
     @total_income ||= statement_items.where(item_type: StatementItem::ItemTypes::INCOME).sum(:amount)
   end
 
-  def total_expediture
-    @total_expediture ||= statement_items.where(item_type: StatementItem::ItemTypes::EXPEDITURE).sum(:amount)
+  def total_expenditure
+    @total_expenditure ||= statement_items.where(item_type: StatementItem::ItemTypes::EXPENDITURE).sum(:amount)
   end
 
   def ends_on_after_starts_on

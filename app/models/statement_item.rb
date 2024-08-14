@@ -5,7 +5,7 @@ class StatementItem < ApplicationRecord
     include EnumUtilities
 
     INCOME = 'income'
-    EXPEDITURE = 'expediture'
+    EXPENDITURE = 'expenditure'
   end
 
   belongs_to :statement

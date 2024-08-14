@@ -28,7 +28,7 @@ RSpec.describe StatementItem, type: :model do
     end
 
     it 'is valid with item_type as income' do
-      statement_item = build(:statement_item, statement:, item_type: StatementItem::ItemTypes::EXPEDITURE)
+      statement_item = build(:statement_item, statement:, item_type: StatementItem::ItemTypes::EXPENDITURE)
       expect(statement_item).to be_valid
     end
   end
