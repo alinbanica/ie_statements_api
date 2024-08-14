@@ -1,11 +1,5 @@
-# frozen_string_literal: true
-
-class StatementSerializer
-  include JSONAPI::Serializer
-
-  attributes :id, :starts_on, :ends_on
-  attribute :rating, &:income_and_expenditure_rating
-  attribute :disposable_income
+class StatementSerializer < ActiveModel::Serializer
+  attributes :id, :starts_on, :ends_on, :disposable_income, :income_and_expenditure_rating
 
   has_many :statement_items
 end

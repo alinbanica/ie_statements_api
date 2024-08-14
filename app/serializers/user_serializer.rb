@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class UserSerializer
-  include JSONAPI::Serializer
-
+class UserSerializer < ActiveModel::Serializer
   attributes :id, :email, :name
+
+  has_many :statements
 end

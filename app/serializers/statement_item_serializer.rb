@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-class StatementItemSerializer
-  include JSONAPI::Serializer
-
+class StatementItemSerializer < ActiveModel::Serializer
   attributes :id, :item_type, :description, :amount
 end
