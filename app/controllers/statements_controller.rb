@@ -5,7 +5,7 @@ class StatementsController < ApplicationController
 
   # GET /statements
   def index
-    statements = Statement.all
+    statements = current_user.statements
 
     render json: statements, status: :ok
   end

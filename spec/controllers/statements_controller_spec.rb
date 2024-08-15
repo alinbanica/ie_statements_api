@@ -17,6 +17,14 @@ RSpec.describe StatementsController, type: :request do
                        ])
   end
 
+  let!(:statement2) do
+    create(:statement, user: create(:user, email: "alin.test@example.org"),
+      statement_items: [
+        build(:statement_item, :income, description: 'Salary', amount: 2800),
+        build(:statement_item, :expenditure, description: 'Travel', amount: 150)
+      ])
+  end
+
   describe 'GET /statements' do
     it 'returns a list of statements' do
       get '/statements', headers: authenticated_headers(user)
